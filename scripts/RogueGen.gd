@@ -268,9 +268,6 @@ func GenerateBank(map_size):
 	# oXXoXXoXXo - interval: 3 run: 2
 	# oXoooXoooX - interval: 4 run: 1
 	
-	print(window_interval)
-	print(window_run)
-	
 	#Set the floor space
 	for i in range(width):
 		for j in range(height):

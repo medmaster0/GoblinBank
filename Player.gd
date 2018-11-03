@@ -6,6 +6,10 @@ extends Node2D
 
 onready var map = get_parent()
 
+#GOBLIN BANK VARS??
+var zodiac_sign = randi()%12
+var isCustomer = false
+
 func _ready():
 	# Called when the node is added to the scene for the first time.
 	# Initialization here
@@ -46,9 +50,13 @@ func step(dir):
 	if is_floor(new_cell) == true:
 		set_map_pos(new_cell)
 	else:
-		print("hit wall")
+		pass
 
 func _input( event ):
+	
+	#Do nothing if it's a customer
+	if isCustomer == true:
+		return 
 	
 	# Input
     # Step Actions

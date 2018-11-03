@@ -1,6 +1,8 @@
 extends Node
 
 export (PackedScene) var Coin
+export (PackedScene) var Player
+export (PackedScene) var ZodiacTile
 
 # class member variables go here, for example:
 # var a = 2
@@ -69,6 +71,7 @@ func _ready():
 		
 		#Also create a label and exchange rate
 		var rate = randi()%5 + 1 #random integer (at least 1)
+		exchange_rates.append(rate)
 		var temp_label = Label.new()
 		temp_label.margin_left = coin.position.x - ($FloorMapPrim.cell_size.x/2)
 		temp_label.margin_top = coin.position.y
@@ -82,6 +85,17 @@ func _ready():
 			colon_label.text = ":"
 			add_child(colon_label)
 			
+	
+	#Generate Customers...
+	newCustomer(  $FloorMapPrim.map_to_world( Vector2(20,20)  ) )
+	newCustomer(  $FloorMapPrim.map_to_world( Vector2(20,21)  ) )
+	newCustomer(  $FloorMapPrim.map_to_world( Vector2(20,22)  ) )
+	newCustomer(  $FloorMapPrim.map_to_world( Vector2(20,23)  ) )
+	newCustomer(  $FloorMapPrim.map_to_world( Vector2(20,24)  ) )
+	newCustomer(  $FloorMapPrim.map_to_world( Vector2(20,25)  ) )
+	newCustomer(  $FloorMapPrim.map_to_world( Vector2(20,26)  ) )
+	newCustomer(  $FloorMapPrim.map_to_world( Vector2(20,27)  ) )
+	
 
 #TODO:
 	#random colored teller windows (color/transparency)
@@ -90,3 +104,55 @@ func _ready():
 #	# Called every frame. Delta is time since last frame.
 #	# Update game logic here.
 #	pass
+
+#Function to create a new creature, coins, and sign
+#At the given input location
+func newCustomer(location):
+	
+	#create the creature
+	var creature = Player.instance()
+	creature.isCustomer = true
+	creature.position = location
+	$FloorMapPrim.add_child(creature)
+	
+	#Create some coins
+	var currency_type = randi()%exchange_coins.size() #Pick a coin position
+	var multiple = randi()%7 + 1
+	var coin = Coin.instance()
+	coin.position = location 
+	coin.position.x = coin.position.x + $FloorMapPrim.cell_size.x
+	add_child(coin)
+	coin.get_child(0).modulate = exchange_coins[currency_type].get_child(0).modulate
+	coin.get_child(1).modulate = exchange_coins[currency_type].get_child(1).modulate
+	#Create proper Multiple of coin
+	var coin_label = Label.new()
+	add_child(coin_label)
+	coin_label.margin_left = coin.position.x + ($FloorMapPrim.cell_size.x)
+	coin_label.margin_top = coin.position.y
+	coin_label.text = str(multiple * exchange_rates[currency_type] )
+	#Determine what color text should be
+	#coin_label.modulate =  MedAlgo.contrastColor( MedAlgo.blendColor( $FloorMapPrim.self_modulate, $FloorMapSeco.self_modulate ))
+	coin_label.modulate = MedAlgo.contrastColor($FloorMapPrim.self_modulate)
+	#Create background forlabel  text
+	var background_pos = $FloorMapPrim.world_to_map( Vector2(coin_label.margin_left, coin_label.margin_top) )
+	$FloorMapPrim.set_cellv(background_pos, 6)
+	
+	#Create the ZodiacTile
+	var zodiac_tile = ZodiacTile.instance()
+	zodiac_tile.position = location
+	zodiac_tile.position.x = zodiac_tile.position.x - $FloorMapPrim.cell_size.x
+	#Make the proper sprite visible
+	zodiac_tile.get_child(creature.zodiac_sign).visible = true
+	#zodiac_tile.modulate =  MedAlgo.contrastColor( MedAlgo.blendColor( $FloorMapPrim.self_modulate, $FloorMapSeco.self_modulate ))
+	zodiac_tile.modulate =  MedAlgo.contrastColor(  $FloorMapPrim.self_modulate)
+	add_child(zodiac_tile)
+	#Create Background for sign
+	background_pos = $FloorMapPrim.world_to_map( zodiac_tile.position ) 
+	$FloorMapPrim.set_cellv(background_pos, 6)
+	
+
+			
+			
+			
+			
+			

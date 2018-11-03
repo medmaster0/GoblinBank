@@ -17,6 +17,8 @@ config/icon="res://icon.png"
 [autoload]
 
 RogueGen="*res://scripts/RogueGen.gd"
+Story="*res://scripts/Story.gd"
+MedAlgo="*res://scripts/MedAlgo.gd"
 
 [gui]
 

@@ -1,0 +1,104 @@
+[gd_scene load_steps=13 format=2]
+
+[ext_resource path="res://tiles/zodiac/aries.png" type="Texture" id=1]
+[ext_resource path="res://tiles/zodiac/taurus.png" type="Texture" id=2]
+[ext_resource path="res://tiles/zodiac/gemini.png" type="Texture" id=3]
+[ext_resource path="res://tiles/zodiac/cancer.png" type="Texture" id=4]
+[ext_resource path="res://tiles/zodiac/leo.png" type="Texture" id=5]
+[ext_resource path="res://tiles/zodiac/virgo.png" type="Texture" id=6]
+[ext_resource path="res://tiles/zodiac/libra.png" type="Texture" id=7]
+[ext_resource path="res://tiles/zodiac/scorpio.png" type="Texture" id=8]
+[ext_resource path="res://tiles/zodiac/sagittarius.png" type="Texture" id=9]
+[ext_resource path="res://tiles/zodiac/capricorn.png" type="Texture" id=10]
+[ext_resource path="res://tiles/zodiac/aquarius.png" type="Texture" id=11]
+[ext_resource path="res://tiles/zodiac/pisces.png" type="Texture" id=12]
+
+[node name="ZodiacTile" type="Node2D"]
+
+_sections_unfolded = [ "Pause" ]
+
+[node name="aries" type="Sprite" parent="." index="0"]
+
+visible = false
+texture = ExtResource( 1 )
+centered = false
+_sections_unfolded = [ "Offset" ]
+
+[node name="taurus" type="Sprite" parent="." index="1"]
+
+visible = false
+texture = ExtResource( 2 )
+centered = false
+_sections_unfolded = [ "Offset" ]
+
+[node name="gemini" type="Sprite" parent="." index="2"]
+
+visible = false
+texture = ExtResource( 3 )
+centered = false
+_sections_unfolded = [ "Offset" ]
+
+[node name="cancer" type="Sprite" parent="." index="3"]
+
+visible = false
+texture = ExtResource( 4 )
+centered = false
+_sections_unfolded = [ "Offset" ]
+
+[node name="leo" type="Sprite" parent="." index="4"]
+
+visible = false
+texture = ExtResource( 5 )
+centered = false
+_sections_unfolded = [ "Offset" ]
+
+[node name="virgo" type="Sprite" parent="." index="5"]
+
+visible = false
+texture = ExtResource( 6 )
+centered = false
+_sections_unfolded = [ "Offset" ]
+
+[node name="libra" type="Sprite" parent="." index="6"]
+
+visible = false
+texture = ExtResource( 7 )
+centered = false
+_sections_unfolded = [ "Offset" ]
+
+[node name="scorpio" type="Sprite" parent="." index="7"]
+
+visible = false
+texture = ExtResource( 8 )
+centered = false
+_sections_unfolded = [ "Offset" ]
+
+[node name="sagittarius" type="Sprite" parent="." index="8"]
+
+visible = false
+texture = ExtResource( 9 )
+centered = false
+_sections_unfolded = [ "Offset" ]
+
+[node name="capricorn" type="Sprite" parent="." index="9"]
+
+visible = false
+texture = ExtResource( 10 )
+centered = false
+_sections_unfolded = [ "Offset" ]
+
+[node name="aquarius" type="Sprite" parent="." index="10"]
+
+visible = false
+texture = ExtResource( 11 )
+centered = false
+_sections_unfolded = [ "Offset" ]
+
+[node name="pisces" type="Sprite" parent="." index="11"]
+
+visible = false
+texture = ExtResource( 12 )
+centered = false
+_sections_unfolded = [ "Offset", "Transform" ]
+
+
