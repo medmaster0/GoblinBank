@@ -1,24 +1,43 @@
-[gd_scene load_steps=4 format=2]
+[gd_scene load_steps=7 format=2]
 
 [ext_resource path="res://Player.gd" type="Script" id=1]
-[ext_resource path="res://tiles/crePrim.png" type="Texture" id=2]
-[ext_resource path="res://tiles/creSeco.png" type="Texture" id=3]
+[ext_resource path="res://Coin.tscn" type="PackedScene" id=2]
+[ext_resource path="res://ZodiacTile.tscn" type="PackedScene" id=3]
+[ext_resource path="res://tiles/crePrim.png" type="Texture" id=4]
+[ext_resource path="res://tiles/creSeco.png" type="Texture" id=5]
+[ext_resource path="res://tiles/solid.png" type="Texture" id=6]
 
 [node name="Player" type="Node2D"]
 
 script = ExtResource( 1 )
 _sections_unfolded = [ "Transform" ]
+Coin = ExtResource( 2 )
+ZodiacTile = ExtResource( 3 )
 
 [node name="SpritePrim" type="Sprite" parent="." index="0"]
 
-texture = ExtResource( 2 )
+texture = ExtResource( 4 )
 centered = false
 _sections_unfolded = [ "Offset" ]
 
 [node name="SpriteSeco" type="Sprite" parent="." index="1"]
 
-texture = ExtResource( 3 )
+texture = ExtResource( 5 )
 centered = false
+_sections_unfolded = [ "Offset" ]
+
+[node name="CoinBackground" type="Sprite" parent="." index="2"]
+
+texture = ExtResource( 6 )
+centered = false
+offset = Vector2( 32, 0 )
+_sections_unfolded = [ "Offset" ]
+
+[node name="ZodiacBackground" type="Sprite" parent="." index="3"]
+
+texture = ExtResource( 6 )
+centered = false
+offset = Vector2( -16, 0 )
 _sections_unfolded = [ "Offset" ]
 
 

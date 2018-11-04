@@ -1,5 +1,8 @@
 extends Node2D
 
+export (PackedScene) var Coin
+export (PackedScene) var ZodiacTile
+
 # class member variables go here, for example:
 # var a = 2
 # var b = "textvar"
@@ -9,6 +12,12 @@ onready var map = get_parent()
 #GOBLIN BANK VARS??
 var zodiac_sign = randi()%12
 var isCustomer = false
+#---
+var coin
+var coin_label
+var coin_background
+var zodiac_tile
+var zodiac_background
 
 func _ready():
 	# Called when the node is added to the scene for the first time.
@@ -20,6 +29,36 @@ func _ready():
 	
 	#Enable user input
 	set_process_input( true )
+	
+	#Initialize all the status stuff (coin, zodiac, labels, backgrounds
+	#coin
+	coin = Coin.instance()
+	coin.position.x = coin.position.x + map.cell_size.x
+	add_child(coin)
+	coin.visible = false
+	#coin background (set colors)
+	$CoinBackground.modulate = map.self_modulate
+	$CoinBackground.visible = false
+	
+	#coin label
+	coin_label = Label.new()
+	coin_label.margin_left = coin_label.margin_left + (2*map.cell_size.x)
+	add_child(coin_label)
+	#set coin label contrast color
+	coin_label.modulate = MedAlgo.contrastColor(map.self_modulate)
+	
+	#zodiac tile
+	zodiac_tile = ZodiacTile.instance()
+	zodiac_tile.position.x = zodiac_tile.position.x - map.cell_size.x
+	zodiac_tile.get_child(zodiac_sign).visible = true
+	add_child(zodiac_tile)
+	#zodiac_tile.visible = false
+	#set zodiac contrast color
+	zodiac_tile.modulate = MedAlgo.contrastColor(map.self_modulate)
+	
+	#zodiacl background (set colors)
+	$ZodiacBackground.modulate = map.self_modulate
+	#$ZodiacBackground.visible = false
 	
 
 #func _process(delta):

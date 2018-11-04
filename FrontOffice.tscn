@@ -2,16 +2,16 @@
 
 [ext_resource path="res://FrontOffice.gd" type="Script" id=1]
 [ext_resource path="res://Coin.tscn" type="PackedScene" id=2]
-[ext_resource path="res://Player.tscn" type="PackedScene" id=3]
-[ext_resource path="res://ZodiacTile.tscn" type="PackedScene" id=4]
+[ext_resource path="res://ZodiacTile.tscn" type="PackedScene" id=3]
+[ext_resource path="res://Player.tscn" type="PackedScene" id=4]
 [ext_resource path="res://Tileset.tres" type="TileSet" id=5]
 
 [node name="FrontOffice" type="Node" index="0"]
 
 script = ExtResource( 1 )
 Coin = ExtResource( 2 )
-Player = ExtResource( 3 )
-ZodiacTile = ExtResource( 4 )
+ZodiacTile = ExtResource( 3 )
+Player = ExtResource( 4 )
 
 [node name="FloorMapSeco" type="TileMap" parent="." index="0"]
 
@@ -54,11 +54,6 @@ occluder_light_mask = 1
 format = 1
 tile_data = PoolIntArray( 852005, 4, 0 )
 _sections_unfolded = [ "Cell", "Visibility" ]
-
-[node name="Player" parent="FloorMapPrim" index="0" instance=ExtResource( 3 )]
-
-position = Vector2( 440, 180 )
-_sections_unfolded = [ "Material", "Transform", "Visibility", "Z Index" ]
 
 [node name="WallMapPrim" type="TileMap" parent="." index="2"]
 
