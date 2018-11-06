@@ -95,12 +95,14 @@ func _ready():
 			add_child(colon_label)
 		
 		#Finally, create a copy and hit box in the bank
+		#The coin...
 		var map_coin = Coin.instance()
 		map_coin.position = $FloorMapPrim.map_to_world( Vector2(15+2*i, 6) )
 		add_child(map_coin)
 		map_coin.get_child(0).modulate = coin.get_child(0).modulate 
 		map_coin.get_child(1).modulate = coin.get_child(1).modulate 
 		map_coins.append(map_coin)
+		#The Hitbox...
 	
 	#Create rope line
 	$WallMapPrim.set_cell(18,16,8)
@@ -185,10 +187,20 @@ func _ready():
 #TODO:
 	#random colored teller windows (color/transparency)
 
-#func _process(delta):
-#	# Called every frame. Delta is time since last frame.
-#	# Update game logic here.
-#	pass
+func _process(delta):
+	# Called every frame. Delta is time since last frame.
+	#EVERY FRAME EVERY FRAME
+	# Update game logic here.
+	
+	#Cycle through all map_coins and check if they collide with main player
+	for map_coin in  map_coins:
+		if map_coin.position == main_player.position:
+			
+			#If collide, gather a new coin for the player...
+			#Should be a new function
+			grabCoin(map_coin)
+	
+	pass
 
 #Function to create a new creature, coins, and sign
 #At the given input location
@@ -209,14 +221,45 @@ func newCustomer(location):
 
 	#Set the coin label
 	creature.coin_label.text = str(multiple * exchange_rates[currency_type] )
+	creature.coin_label.visible = true
 	creature.get_child(2).visible = true
+	
 
 	#Set the zodiac tile
 	creature.zodiac_tile.visible = true
 	creature.get_child(3).visible = true
 
+#Function that gathers a new coin for the player 
+#("grabs" from the coin pile)
+func grabCoin(grabbed_coin):
+	
+	#Move back a step
+	main_player.position.y = main_player.position.y  + $FloorMapPrim.cell_size.y
 
-
+	#Turn on and color the player's coin "background"
+	main_player.get_child(2).modulate = $FloorMapPrim.self_modulate
+	main_player.get_child(2).visible = true
+	
+	#Determine the proper coin_label (the amount of coins there are)
+	#If colors are the same, then it means we aren't switching types
+	#(and thusly incrementing our counter, not resetting it)
+	if main_player.coin.get_child(0).modulate == grabbed_coin.get_child(0).modulate \
+	and main_player.coin.get_child(1).modulate == grabbed_coin.get_child(1).modulate:
+		var count = int(main_player.coin_label.text)
+		count = count + 1
+		main_player.coin_label.text = str(count)
+	else:
+		main_player.coin_label.text = "1"
+	
+	main_player.coin_label.visible = true
+	
+	#Color the player's hidden coin and make visible
+	main_player.coin.get_child(0).modulate = grabbed_coin.get_child(0).modulate
+	main_player.coin.get_child(1).modulate = grabbed_coin.get_child(1).modulate
+	main_player.coin.visible = true
+	
+	
+	
 			
 			
 			

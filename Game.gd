@@ -58,6 +58,8 @@ func _ready():
 	var room_point = RogueGen.inside_rect(start_room)
 	#$FloorMapPrim/$Player.global_position = $FloorMapPrim.map_to_world(room_point)
 	$FloorMapPrim/Player.position = $FloorMapPrim.map_to_world(room_point)
+	#Turn off zodiac symbol
+	$FloorMapPrim/Player/ZodiacBackground.visible = false
 	
 	#DEBUG: Change to different scene
 	get_tree().change_scene("res://FrontOffice.tscn")

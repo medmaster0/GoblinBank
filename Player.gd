@@ -15,9 +15,9 @@ var isCustomer = false
 #---
 var coin
 var coin_label
-var coin_background
+#var coin_background #children, not vars
 var zodiac_tile
-var zodiac_background
+#var zodiac_background #children, not vars
 
 func _ready():
 	# Called when the node is added to the scene for the first time.
@@ -46,6 +46,8 @@ func _ready():
 	add_child(coin_label)
 	#set coin label contrast color
 	coin_label.modulate = MedAlgo.contrastColor(map.self_modulate)
+	coin_label.text = "1"
+	coin_label.visible = false
 	
 	#zodiac tile
 	zodiac_tile = ZodiacTile.instance()
