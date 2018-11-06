@@ -3,7 +3,7 @@ extends Node
 export (PackedScene) var Coin
 export (PackedScene) var ZodiacTile
 export (PackedScene) var Player
-
+export (PackedScene) var SpeechRequest
 
 # class member variables go here, for example:
 # var a = 2
@@ -11,6 +11,7 @@ export (PackedScene) var Player
 
 var exchange_coins = [] #a list of coins traded at the bank
 var exchange_rates = [] #a list of exchange rates. ex. 5:6:7
+var map_coins = [] #list of coins that appear on map (with hit boxes)
 
 var main_player #the main player instance
 
@@ -92,7 +93,14 @@ func _ready():
 			colon_label.margin_top = coin.position.y
 			colon_label.text = ":"
 			add_child(colon_label)
-			
+		
+		#Finally, create a copy and hit box in the bank
+		var map_coin = Coin.instance()
+		map_coin.position = $FloorMapPrim.map_to_world( Vector2(15+2*i, 6) )
+		add_child(map_coin)
+		map_coin.get_child(0).modulate = coin.get_child(0).modulate 
+		map_coin.get_child(1).modulate = coin.get_child(1).modulate 
+		map_coins.append(map_coin)
 	
 	#Create rope line
 	$WallMapPrim.set_cell(18,16,8)
@@ -145,8 +153,22 @@ func _ready():
 	$WallMapPrim.set_cell(23,27,8)
 	$WallMapSeco.set_cell(23,27,7)
 	
+	#DEBUG: Try Speech Bubble
+	var speech_bubble = SpeechRequest.instance()
+	add_child(speech_bubble)
+	speech_bubble.position = $FloorMapPrim.map_to_world( Vector2(19,13) )
+	#Skew the speech_bubble further
+	speech_bubble.position.y = speech_bubble.position.y + ($FloorMapPrim.cell_size.y/2.0)
+	speech_bubble.position.x = speech_bubble.position.x - ($FloorMapPrim.cell_size.x/2.0)
+	
+	#DEBUG: Color the speech bubble
+	#Choose a random exchange coin
+	var temp_coin = exchange_coins[randi()%exchange_coins.size()]
+	speech_bubble.get_child(1).get_child(0).modulate = temp_coin.get_child(0).modulate
+	speech_bubble.get_child(1).get_child(1).modulate = temp_coin.get_child(1).modulate
+	
 	#Generate Customers...
-	newCustomer(  $FloorMapPrim.map_to_world( Vector2(20,16)  ) )
+	newCustomer(  $FloorMapPrim.map_to_world( Vector2(20,15)  ) )
 	newCustomer(  $FloorMapPrim.map_to_world( Vector2(20,17)  ) )
 	newCustomer(  $FloorMapPrim.map_to_world( Vector2(20,18)  ) )
 	newCustomer(  $FloorMapPrim.map_to_world( Vector2(20,19)  ) )
