@@ -3,26 +3,8 @@
 [ext_resource path="res://Game.gd" type="Script" id=1]
 [ext_resource path="res://Coin.tscn" type="PackedScene" id=2]
 [ext_resource path="res://Tileset.tres" type="TileSet" id=3]
-[ext_resource path="res://Player.tscn" type="PackedScene" id=4]
-
-[sub_resource type="GDScript" id=1]
-
-script/source = "extends TileMap
-
-# class member variables go here, for example:
-# var a = 2
-# var b = \"textvar\"
-
-func _ready():
-	# Called when the node is added to the scene for the first time.
-	# Initialization here
-	pass
-
-#func _process(delta):
-#	# Called every frame. Delta is time since last frame.
-#	# Update game logic here.
-#	pass
-"
+[ext_resource path="res://FloorMapPrim.gd" type="Script" id=4]
+[ext_resource path="res://Player.tscn" type="PackedScene" id=5]
 
 [node name="Game" type="Node" index="0"]
 
@@ -111,10 +93,10 @@ collision_mask = 1
 occluder_light_mask = 1
 format = 1
 tile_data = PoolIntArray(  )
-script = SubResource( 1 )
+script = ExtResource( 4 )
 _sections_unfolded = [ "Cell", "Material", "Occluder", "Transform", "Visibility" ]
 
-[node name="Player" parent="FloorMapPrim" index="0" instance=ExtResource( 4 )]
+[node name="Player" parent="FloorMapPrim" index="0" instance=ExtResource( 5 )]
 
 [node name="Camera2D" type="Camera2D" parent="FloorMapPrim/Player" index="2"]
 

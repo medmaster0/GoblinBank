@@ -6,6 +6,9 @@ export (PackedScene) var Coin
 # var a = 2
 # var b = "textvar"
 
+#GLobal Vars
+var map_coins = [] #array to hold the map coins
+
 func _ready():
 	# Called when the node is added to the scene for the first time.
 	# Initialization here
@@ -51,12 +54,12 @@ func _ready():
 		var coin_point = RogueGen.inside_rect(room)
 		var coin = Coin.instance()
 		coin.position = $FloorMapPrim.map_to_world(coin_point)
-		add_child(coin)
+		$FloorMapPrim.add_child(coin)
+		map_coins.append(coin)
 
 	#Put the Player in a random room
 	var start_room = rooms[randi()%rooms.size()]
 	var room_point = RogueGen.inside_rect(start_room)
-	#$FloorMapPrim/$Player.global_position = $FloorMapPrim.map_to_world(room_point)
 	$FloorMapPrim/Player.position = $FloorMapPrim.map_to_world(room_point)
 	#Turn off zodiac symbol
 	$FloorMapPrim/Player/ZodiacBackground.visible = false
@@ -64,6 +67,11 @@ func _ready():
 	
 	#DEBUG: Change to different scene
 	#get_tree().change_scene("res://FrontOffice.tscn")
+	
+	#More debug...
+	#DEBUG: Path finiding stuff
+	$FloorMapPrim.find_path($FloorMapPrim/Player.position, map_coins[1].position)
+	
 	
 	
 	pass
