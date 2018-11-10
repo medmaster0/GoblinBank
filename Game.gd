@@ -60,9 +60,10 @@ func _ready():
 	$FloorMapPrim/Player.position = $FloorMapPrim.map_to_world(room_point)
 	#Turn off zodiac symbol
 	$FloorMapPrim/Player/ZodiacBackground.visible = false
+	$FloorMapPrim/Player.zodiac_tile.visible = false
 	
 	#DEBUG: Change to different scene
-	get_tree().change_scene("res://FrontOffice.tscn")
+	#get_tree().change_scene("res://FrontOffice.tscn")
 	
 	
 	pass
