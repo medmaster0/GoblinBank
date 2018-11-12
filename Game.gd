@@ -70,8 +70,8 @@ func _ready():
 	
 	#More debug...
 	#DEBUG: Path finiding stuff
-	$FloorMapPrim.find_path($FloorMapPrim/Player.position, map_coins[1].position)
-	
+	var path = $FloorMapPrim.find_path($FloorMapPrim/Player.position, map_coins[3].position)
+	print(path)
 	
 	
 	pass

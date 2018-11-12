@@ -67,79 +67,121 @@ func find_path(global_start, global_end):
 			#Make a new node (with calculations) and add to set
 			var temp_x = next_node.coords.x+1
 			var temp_y = next_node.coords.y
-			if Vector2(temp_x,temp_y) == end:
-				path_from_set(closed_set, next_node)
+			if Vector2(temp_x,temp_y) == end: #check if reached target
+				return( path_from_set(next_node) )
 				break
-			var neighbor_node = {
-				"g" : next_node.g + 1,
-				"h" : abs(end.x - temp_x) + abs(end.y - temp_y), #Manhattan Distance"
-				"f" : "not set yet",
-				"coords" : Vector2(temp_x, temp_y),
-				"last_node" : next_node
-			}
-			neighbor_node.f = neighbor_node.g + neighbor_node.h #Now calculate f
-			open_set.append(neighbor_node)
+				
+			#Check if node coords have already been entered in closed_set
+			if isVectorInSet(Vector2(temp_x,temp_y), closed_set) == false: #If not closed yet
+				#Then add a new node for those coords
+				var neighbor_node = {
+					"g" : next_node.g + 1,
+					"h" : abs(end.x - temp_x) + abs(end.y - temp_y), #Manhattan Distance"
+					"f" : "not set yet",
+					"coords" : Vector2(temp_x, temp_y),
+					"last_node" : next_node
+				}
+				neighbor_node.f = neighbor_node.g + neighbor_node.h #Now calculate f
+				open_set.append(neighbor_node)
 			
 		#LEFT
 		if get_cell(next_node.coords.x-1, next_node.coords.y) in walkable_tiles:
 			#Make a new node (with calculations) and add to set
 			var temp_x = next_node.coords.x-1
 			var temp_y = next_node.coords.y
-			if Vector2(temp_x,temp_y) == end:
-				path_from_set(closed_set, next_node)
+			if Vector2(temp_x,temp_y) == end: #check if reached target
+				return( path_from_set(next_node) )
 				break
-			var neighbor_node = {
-				"g" : next_node.g + 1,
-				"h" : abs(end.x - temp_x) + abs(end.y - temp_y), #Manhattan Distance"
-				"f" : "not set yet",
-				"coords" : Vector2(temp_x, temp_y),
-				"last_node" : next_node
-			}
-			neighbor_node.f = neighbor_node.g + neighbor_node.h #Now calculate f
-			open_set.append(neighbor_node)
+				
+			#Check if node coords have already been entered in closed_set
+			if isVectorInSet(Vector2(temp_x,temp_y), closed_set) == false: #If not closed yet
+				#Then add a new node for those coords
+				var neighbor_node = {
+					"g" : next_node.g + 1,
+					"h" : abs(end.x - temp_x) + abs(end.y - temp_y), #Manhattan Distance"
+					"f" : "not set yet",
+					"coords" : Vector2(temp_x, temp_y),
+					"last_node" : next_node
+				}
+				neighbor_node.f = neighbor_node.g + neighbor_node.h #Now calculate f
+				open_set.append(neighbor_node)
 			
 		#UP
 		if get_cell(next_node.coords.x, next_node.coords.y-1) in walkable_tiles:
 			#Make a new node (with calculations) and add to set
 			var temp_x = next_node.coords.x
 			var temp_y = next_node.coords.y-1
-			if Vector2(temp_x,temp_y) == end:
-				path_from_set(closed_set, next_node)
+			if Vector2(temp_x,temp_y) == end: #check if reached target
+				return( path_from_set(next_node) )
 				break
-			var neighbor_node = {
-				"g" : next_node.g + 1,
-				"h" : abs(end.x - temp_x) + abs(end.y - temp_y), #Manhattan Distance"
-				"f" : "not set yet",
-				"coords" : Vector2(temp_x, temp_y),
-				"last_node" : next_node
-			}
-			neighbor_node.f = neighbor_node.g + neighbor_node.h #Now calculate f
-			open_set.append(neighbor_node)
+				
+			#Check if node coords have already been entered in closed_set
+			if isVectorInSet(Vector2(temp_x,temp_y), closed_set) == false: #If not closed yet
+				#Then add a new node for those coords
+				var neighbor_node = {
+					"g" : next_node.g + 1,
+					"h" : abs(end.x - temp_x) + abs(end.y - temp_y), #Manhattan Distance"
+					"f" : "not set yet",
+					"coords" : Vector2(temp_x, temp_y),
+					"last_node" : next_node
+				}
+				neighbor_node.f = neighbor_node.g + neighbor_node.h #Now calculate f
+				open_set.append(neighbor_node)
 			
 		#DOWN
 		if get_cell(next_node.coords.x, next_node.coords.y+1) in walkable_tiles:
 			#Make a new node (with calculations) and add to set
 			var temp_x = next_node.coords.x
 			var temp_y = next_node.coords.y+1
-			if Vector2(temp_x,temp_y) == end:
-				path_from_set(closed_set, next_node)
+			if Vector2(temp_x,temp_y) == end: #check if reached target
+				return( path_from_set(next_node) )
 				break
-			var neighbor_node = {
-				"g" : next_node.g + 1,
-				"h" : abs(end.x - temp_x) + abs(end.y - temp_y), #Manhattan Distance"
-				"f" : "not set yet",
-				"coords" : Vector2(temp_x, temp_y),
-				"last_node" : next_node
-			}
-			neighbor_node.f = neighbor_node.g + neighbor_node.h #Now calculate f
-			open_set.append(neighbor_node)
+				
+			#Check if node coords have already been entered in closed_set
+			if isVectorInSet(Vector2(temp_x,temp_y), closed_set) == false: #If not closed yet
+				#Then add a new node for those coords
+				var neighbor_node = {
+					"g" : next_node.g + 1,
+					"h" : abs(end.x - temp_x) + abs(end.y - temp_y), #Manhattan Distance"
+					"f" : "not set yet",
+					"coords" : Vector2(temp_x, temp_y),
+					"last_node" : next_node
+				}
+				neighbor_node.f = neighbor_node.g + neighbor_node.h #Now calculate f
+				open_set.append(neighbor_node)
+			
+		#Finally, add the node to the closed set
+		closed_set.append(next_node)
+			
 	#end while - If this while broke, means we found target
-		#break
+	
 
-#A utility function for A* that will reconstruct the path from the cluttered closed set
-func path_from_set(closed_set, latest_node):
-	print("hi mom")
+#A utility function for A* that will reconstruct the path from given node
+#Returns a list of steps only 
+#array of Vector2
+func path_from_set(latest_node):
+	
+	var path_array = [] #The list of coords we'll be returning back
+	
+	var current_node = latest_node #temp node for interating list
+	while(current_node.last_node != null):
+		path_array.push_front(current_node.coords)
+		current_node = current_node.last_node
 		
+	return(path_array)
 		
+
+#Checks if the input coords (Vector2) have already been entered in the search set
+func isVectorInSet(search_coords, search_set):
+	
+	#Iterate through all the nodes in set
+	for node in search_set:
+		if search_coords == node.coords: #If the coords match the target
+			return(true)
+	
+	#If it makes it here, not in set
+	return(false)
+	
+	
 	
 	
