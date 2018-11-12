@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://FrontOffice.gd" type="Script" id=1]
 [ext_resource path="res://Coin.tscn" type="PackedScene" id=2]
@@ -6,6 +6,7 @@
 [ext_resource path="res://Player.tscn" type="PackedScene" id=4]
 [ext_resource path="res://SpeechRequest.tscn" type="PackedScene" id=5]
 [ext_resource path="res://Tileset.tres" type="TileSet" id=6]
+[ext_resource path="res://FloorMapPrim.gd" type="Script" id=7]
 
 [node name="FrontOffice" type="Node"]
 
@@ -55,6 +56,7 @@ collision_mask = 1
 occluder_light_mask = 1
 format = 1
 tile_data = PoolIntArray( 852005, 4, 0 )
+script = ExtResource( 7 )
 _sections_unfolded = [ "Cell", "Visibility" ]
 
 [node name="WallMapPrim" type="TileMap" parent="." index="2"]

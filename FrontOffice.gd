@@ -67,8 +67,6 @@ func _ready():
 					$FloorMapPrim.set_cell(x,y,0)
 					
 	
-	
-	
 	#Generate random currencies and exchange rate
 	var num_currencies = randi()%3 + 6 #at least three
 	for i in range(num_currencies):
@@ -182,6 +180,10 @@ func _ready():
 #	newCustomer(  $FloorMapPrim.map_to_world( Vector2(20,25)  ) )
 #	newCustomer(  $FloorMapPrim.map_to_world( Vector2(20,26)  ) )
 #	newCustomer(  $FloorMapPrim.map_to_world( Vector2(20,27)  ) )
+
+	#DEBUG SEARCH TEST
+#	var path = $FloorMapPrim.find_path(main_player.position, map_coins[2].position)
+#	print(path)
 	
 
 #TODO:

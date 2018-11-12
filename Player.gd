@@ -18,6 +18,9 @@ var coin_label
 #var coin_background #children, not vars
 var zodiac_tile
 #var zodiac_background #children, not vars
+var path = [] #A set of steps to follow in pathfinding
+#------
+var total_delta = 0 #used as a counter in process loop
 
 func _ready():
 	# Called when the node is added to the scene for the first time.
@@ -63,10 +66,19 @@ func _ready():
 	#$ZodiacBackground.visible = false
 	
 
-#func _process(delta):
-#	# Called every frame. Delta is time since last frame.
-#	# Update game logic here.
-#	pass
+func _process(delta):
+	# Called every frame. Delta is time since last frame.
+	# Update game logic here.
+	total_delta = total_delta + delta
+	
+	if total_delta > 1.0:
+		
+		#Take a step in the path
+		path_step()
+		
+		total_delta = total_delta - 1.0
+	
+	pass
 
 
 # Get our position in Map Coordinates
@@ -111,10 +123,17 @@ func _input( event ):
 		step( Vector2( 1, 0 ) )
 	
 	
+#A function that takes a step in the stored path
+func path_step():
 	
+	if path.size() == 0:
+		return #Do nothings since there are no more steps left
 	
+	#Take the first Vector2 in the list
+	var next_coords = path.pop_front()
 	
-	
+	#Move the Creature there (remember to convert to world coords from map)
+	position = map.map_to_world(next_coords)
 	
 	
 	

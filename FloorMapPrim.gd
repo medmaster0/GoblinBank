@@ -14,6 +14,7 @@ func _ready():
 #	# Update game logic here.
 #	pass
 
+#A STAR FUNCTIONS!!!!
 #A* Path Finding 
 #returns an array of steps to follow between the two points
 #returns (9999,9999) if no path 
@@ -21,8 +22,6 @@ func _ready():
 #
 #How it works:
 #We have two sets, open and closed set
-
-
 func find_path(global_start, global_end):
 	
 	#Function vars
@@ -68,7 +67,7 @@ func find_path(global_start, global_end):
 			var temp_x = next_node.coords.x+1
 			var temp_y = next_node.coords.y
 			if Vector2(temp_x,temp_y) == end: #check if reached target
-				return( path_from_set(next_node) )
+				return( path_from_set(next_node,end) )
 				break
 				
 			#Check if node coords have already been entered in closed_set
@@ -90,7 +89,7 @@ func find_path(global_start, global_end):
 			var temp_x = next_node.coords.x-1
 			var temp_y = next_node.coords.y
 			if Vector2(temp_x,temp_y) == end: #check if reached target
-				return( path_from_set(next_node) )
+				return( path_from_set(next_node,end) )
 				break
 				
 			#Check if node coords have already been entered in closed_set
@@ -112,7 +111,7 @@ func find_path(global_start, global_end):
 			var temp_x = next_node.coords.x
 			var temp_y = next_node.coords.y-1
 			if Vector2(temp_x,temp_y) == end: #check if reached target
-				return( path_from_set(next_node) )
+				return( path_from_set(next_node,end) )
 				break
 				
 			#Check if node coords have already been entered in closed_set
@@ -134,7 +133,7 @@ func find_path(global_start, global_end):
 			var temp_x = next_node.coords.x
 			var temp_y = next_node.coords.y+1
 			if Vector2(temp_x,temp_y) == end: #check if reached target
-				return( path_from_set(next_node) )
+				return( path_from_set(next_node, end) )
 				break
 				
 			#Check if node coords have already been entered in closed_set
@@ -159,7 +158,7 @@ func find_path(global_start, global_end):
 #A utility function for A* that will reconstruct the path from given node
 #Returns a list of steps only 
 #array of Vector2
-func path_from_set(latest_node):
+func path_from_set(latest_node, end_coords):
 	
 	var path_array = [] #The list of coords we'll be returning back
 	
@@ -167,6 +166,8 @@ func path_from_set(latest_node):
 	while(current_node.last_node != null):
 		path_array.push_front(current_node.coords)
 		current_node = current_node.last_node
+		
+	path_array.append(end_coords)
 		
 	return(path_array)
 		
@@ -181,7 +182,7 @@ func isVectorInSet(search_coords, search_set):
 	
 	#If it makes it here, not in set
 	return(false)
-	
+#END A STAR SEARCH AFFILIATED FUNCTIONS
 	
 	
 	
