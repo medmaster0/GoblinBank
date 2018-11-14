@@ -49,7 +49,7 @@ func _ready():
 	add_child(coin_label)
 	#set coin label contrast color
 	coin_label.modulate = MedAlgo.contrastColor(map.self_modulate)
-	coin_label.text = "1"
+	coin_label.text = "0"
 	coin_label.visible = false
 	
 	#zodiac tile
@@ -71,12 +71,14 @@ func _process(delta):
 	# Update game logic here.
 	total_delta = total_delta + delta
 	
-	if total_delta > 1.0:
+	var time_period = 0.5
+	
+	if total_delta > time_period:
 		
 		#Take a step in the path
 		path_step()
-		
-		total_delta = total_delta - 1.0
+			
+		total_delta = total_delta - time_period
 	
 	pass
 
@@ -124,10 +126,12 @@ func _input( event ):
 	
 	
 #A function that takes a step in the stored path
+#Returns true if done with path
+#Returns false if not
 func path_step():
 	
 	if path.size() == 0:
-		return #Do nothings since there are no more steps left
+		return(true) #Do nothings since there are no more steps left
 	
 	#Take the first Vector2 in the list
 	var next_coords = path.pop_front()
@@ -135,6 +139,7 @@ func path_step():
 	#Move the Creature there (remember to convert to world coords from map)
 	position = map.map_to_world(next_coords)
 	
+	return(false)
 	
 	
 	

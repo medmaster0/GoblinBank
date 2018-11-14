@@ -66,13 +66,13 @@ func _ready():
 	$FloorMapPrim/Player.zodiac_tile.visible = false
 	
 	#DEBUG: Change to different scene
-	#get_tree().change_scene("res://FrontOffice.tscn")
+	get_tree().change_scene("res://FrontOffice.tscn")
 	
 	#More debug...
 	#DEBUG: Path finiding stuff
 #	var path = $FloorMapPrim.find_path($FloorMapPrim/Player.position, map_coins[3].position)
 #	print(path)
-	$FloorMapPrim/Player.path = $FloorMapPrim.find_path($FloorMapPrim/Player.position, map_coins[3].position)
+	#$FloorMapPrim/Player.path = $FloorMapPrim.find_path($FloorMapPrim/Player.position, map_coins[3].position)
 	#print($FloorMapPrim/Player.path)
 
 #func _process(delta):

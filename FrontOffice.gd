@@ -14,6 +14,7 @@ var exchange_rates = [] #a list of exchange rates. ex. 5:6:7
 var map_coins = [] #list of coins that appear on map (with hit boxes)
 
 var main_player #the main player instance
+var speech_bubble
 
 func _ready():
 	# Called when the node is added to the scene for the first time.
@@ -100,7 +101,7 @@ func _ready():
 		map_coin.get_child(0).modulate = coin.get_child(0).modulate 
 		map_coin.get_child(1).modulate = coin.get_child(1).modulate 
 		map_coins.append(map_coin)
-		#The Hitbox...
+		#(NOT USING HITBOXES)
 	
 	#Create rope line
 	$WallMapPrim.set_cell(18,16,8)
@@ -154,7 +155,7 @@ func _ready():
 	$WallMapSeco.set_cell(23,27,7)
 	
 	#DEBUG: Try Speech Bubble
-	var speech_bubble = SpeechRequest.instance()
+	speech_bubble = SpeechRequest.instance()
 	add_child(speech_bubble)
 	speech_bubble.position = $FloorMapPrim.map_to_world( Vector2(19,13) )
 	#Skew the speech_bubble further
@@ -182,8 +183,7 @@ func _ready():
 #	newCustomer(  $FloorMapPrim.map_to_world( Vector2(20,27)  ) )
 
 	#DEBUG SEARCH TEST
-#	var path = $FloorMapPrim.find_path(main_player.position, map_coins[2].position)
-#	print(path)
+	#main_player.path = $FloorMapPrim.find_path(main_player.position, map_coins[2].position)
 	
 
 #TODO:
@@ -194,13 +194,31 @@ func _process(delta):
 	#EVERY FRAME EVERY FRAME
 	# Update game logic here.
 	
-	#Cycle through all map_coins and check if they collide with main player
-	for map_coin in  map_coins:
-		if map_coin.position == main_player.position:
+	#if the player is currently not walking a path... (reached destinatioin
+	if main_player.path.size() == 0:
+		#Cycle through all map_coins and check if they collide with main player
+		for map_coin in  map_coins:
+			if map_coin.position == main_player.position:
+				#If collide, gather a new coin for the player...
+				#Should be a new function
+				grabCoin(map_coin)
+		#Check if main_player is at customer
+		var counter_position = $FloorMapPrim.get_child(1).position+Vector2(0,-3*$FloorMapPrim.cell_size.y)
+		if main_player.position == counter_position:
+			payCustomer()
 			
-			#If collide, gather a new coin for the player...
-			#Should be a new function
-			grabCoin(map_coin)
+	#Check if the teller's path is empty (and should get a new one)
+	#If reached target! (and ever after)
+	if main_player.path.size() == 0:
+		#Determine if it should go back to window or get more coin
+		if hasCashExchange() == true:
+			#Walk back to customer
+			var counter_position = $FloorMapPrim.get_child(1).position+Vector2(0,-3*$FloorMapPrim.cell_size.y)
+			main_player.path = $FloorMapPrim.find_path(main_player.position, counter_position)
+		else:
+			#Get path to the coin the customer REQUESTS
+			var target_coin_index = whichExchangeIndex(speech_bubble.get_child(1))
+			main_player.path = $FloorMapPrim.find_path(main_player.position, map_coins[target_coin_index].position)
 	
 	pass
 
@@ -225,7 +243,6 @@ func newCustomer(location):
 	creature.coin_label.text = str(multiple * exchange_rates[currency_type] )
 	creature.coin_label.visible = true
 	creature.get_child(2).visible = true
-	
 
 	#Set the zodiac tile
 	creature.zodiac_tile.visible = true
@@ -260,10 +277,61 @@ func grabCoin(grabbed_coin):
 	main_player.coin.get_child(1).modulate = grabbed_coin.get_child(1).modulate
 	main_player.coin.visible = true
 	
+#Check if the label of the main_player 
+#Equals the proper exchange rate criteria
+#For what the customer requests
+# For ex. 3y : 2x & customer has 6x, then main_player needs 9y
+func hasCashExchange():
+		
+	#Checks global vars: exchange_rates, customer_request_speechbubble
+	
+	#Determine which coin the customer is asking for (find the index)
+	var request_coin = speech_bubble.get_child(1)
+	var request_index = whichExchangeIndex(request_coin) #the index in exchange_rates that the customer requests
+	var request_rate = exchange_rates[request_index] #the actual exchange rate of what the customer WANTS
+	
+	#Determine the coin which the customer has and wants to exchange
+	var customer_coin = $FloorMapPrim.get_child(1).coin #0 child is mainplayer, after that, customers form a queue
+	var customer_index = whichExchangeIndex(customer_coin)
+	var customer_rate = exchange_rates[customer_index]
+	
+	#Determine how many coins the customer has
+	var customer_amount = $FloorMapPrim.get_child(1).coin_label.text
+	customer_amount = int(customer_amount) #convert to int
+	
+	#Determine how many units the teller needs
+	#(How many multiples of the exchange rate value)
+	var units = customer_amount/customer_rate #NORMALIZED "units" on the exchange
+	
+	#Use units to determine how many actual coins 
+	var request_amount = units * request_rate
+	
+	if int(main_player.coin_label.text) == request_amount:
+		return true
 	
 	
+	return false #return false if we make it down here
+	
+#A function that determines the *index* on the exchange of the input coin		
+func whichExchangeIndex(in_coin):
+	var coin_index = 0
+	for exchange_coin in exchange_coins:
+		if exchange_coin.get_child(0).modulate == in_coin.get_child(0).modulate && exchange_coin.get_child(1).modulate == in_coin.get_child(1).modulate:
+			break
+		coin_index = coin_index+1#count the coins we cycle through
+		
+	#coin_index now has the index of the right exchange_coin (corresponding to customers request)
+	return coin_index
 			
+
+#A function for paying the customer
+#Clears all labels and deuques first customer
+func payCustomer():
+	$FloorMapPrim.get_child(1).queue_free()
+	main_player.coin_label.text = "0"
+	main_player.coin_label.visible = false
+	main_player.get_child(2).visible = false #the coin_background
+	main_player.coin.visible = false
+
 			
-			
-			
-			
+#TODO: MAKE A function for moving up creatures in line
