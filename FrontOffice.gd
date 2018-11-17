@@ -176,10 +176,10 @@ func _ready():
 	newCustomer(  $FloorMapPrim.map_to_world( Vector2(20,20)  ) )
 	newCustomer(  $FloorMapPrim.map_to_world( Vector2(20,21)  ) )
 	newCustomer(  $FloorMapPrim.map_to_world( Vector2(20,22)  ) )
-#	newCustomer(  $FloorMapPrim.map_to_world( Vector2(20,23)  ) )
-#	newCustomer(  $FloorMapPrim.map_to_world( Vector2(20,24)  ) )
-#	newCustomer(  $FloorMapPrim.map_to_world( Vector2(20,25)  ) )
-#	newCustomer(  $FloorMapPrim.map_to_world( Vector2(20,26)  ) )
+	newCustomer(  $FloorMapPrim.map_to_world( Vector2(20,23)  ) )
+	newCustomer(  $FloorMapPrim.map_to_world( Vector2(20,24)  ) )
+	newCustomer(  $FloorMapPrim.map_to_world( Vector2(20,25)  ) )
+	newCustomer(  $FloorMapPrim.map_to_world( Vector2(20,26)  ) )
 #	newCustomer(  $FloorMapPrim.map_to_world( Vector2(20,27)  ) )
 
 	#DEBUG SEARCH TEST
@@ -205,15 +205,24 @@ func _process(delta):
 		#Check if main_player is at customer
 		var counter_position = $FloorMapPrim.get_child(1).position+Vector2(0,-3*$FloorMapPrim.cell_size.y)
 		if main_player.position == counter_position:
+			#DIDNT ACTUALLY NEED TIMER< BUT KEEP IT HERE FOR FUTURE REF
+#			var t = Timer.new()
+#			t.set_wait_time(5)
+#			t.set_one_shot(true)
+#			add_child(t)
+#			t.start()
+#			yield(t, "timeout")
+#			t.queue_free()
+#			print("dont time")
+			#end timer
+			print("rech")
 			payCustomer()
-			
-	#Check if the teller's path is empty (and should get a new one)
-	#If reached target! (and ever after)
-	if main_player.path.size() == 0:
+			moveLineUp()
+
 		#Determine if it should go back to window or get more coin
 		if hasCashExchange() == true:
 			#Walk back to customer
-			var counter_position = $FloorMapPrim.get_child(1).position+Vector2(0,-3*$FloorMapPrim.cell_size.y)
+			counter_position = $FloorMapPrim.get_child(1).position+Vector2(0,-3*$FloorMapPrim.cell_size.y)
 			main_player.path = $FloorMapPrim.find_path(main_player.position, counter_position)
 		else:
 			#Get path to the coin the customer REQUESTS
@@ -327,7 +336,9 @@ func whichExchangeIndex(in_coin):
 #A function for paying the customer
 #Clears all labels and deuques first customer
 func payCustomer():
-	$FloorMapPrim.get_child(1).queue_free()
+	
+	#$FloorMapPrim.get_child(1).queue_free()
+	$FloorMapPrim.remove_child($FloorMapPrim.get_child(1)) #remove from scene
 	main_player.coin_label.text = "0"
 	main_player.coin_label.visible = false
 	main_player.get_child(2).visible = false #the coin_background
@@ -335,3 +346,31 @@ func payCustomer():
 
 			
 #TODO: MAKE A function for moving up creatures in line
+#A function for moving up creatures in the line
+func moveLineUp():
+	
+	#print($FloorMapPrim.get_children())
+
+	#Move first customer directly up to counter
+	$FloorMapPrim.get_child(1).position = $FloorMapPrim.get_child(1).position + Vector2(0,-2*$FloorMapPrim.cell_size.y)
+
+	#For all the rest, move up one step
+	$FloorMapPrim.get_child(2).position = $FloorMapPrim.get_child(2).position + Vector2(0,-1*$FloorMapPrim.cell_size.y)
+	$FloorMapPrim.get_child(3).position = $FloorMapPrim.get_child(3).position + Vector2(0,-1*$FloorMapPrim.cell_size.y)
+	$FloorMapPrim.get_child(4).position = $FloorMapPrim.get_child(4).position + Vector2(0,-1*$FloorMapPrim.cell_size.y)
+	$FloorMapPrim.get_child(5).position = $FloorMapPrim.get_child(5).position + Vector2(0,-1*$FloorMapPrim.cell_size.y)
+	$FloorMapPrim.get_child(6).position = $FloorMapPrim.get_child(6).position + Vector2(0,-1*$FloorMapPrim.cell_size.y)
+	$FloorMapPrim.get_child(7).position = $FloorMapPrim.get_child(7).position + Vector2(0,-1*$FloorMapPrim.cell_size.y)
+	$FloorMapPrim.get_child(8).position = $FloorMapPrim.get_child(8).position + Vector2(0,-1*$FloorMapPrim.cell_size.y)
+	$FloorMapPrim.get_child(9).position = $FloorMapPrim.get_child(9).position + Vector2(0,-1*$FloorMapPrim.cell_size.y)
+	$FloorMapPrim.get_child(10).position = $FloorMapPrim.get_child(10).position + Vector2(0,-1*$FloorMapPrim.cell_size.y)
+	
+	#And also add a new customer
+	newCustomer(  $FloorMapPrim.map_to_world( Vector2(20,26)  ) )
+	#New customer means new request
+	#Change Speech bubble coin to random
+	#Choose a random exchange coin
+	var temp_coin = exchange_coins[randi()%exchange_coins.size()]
+	speech_bubble.get_child(1).get_child(0).modulate = temp_coin.get_child(0).modulate
+	speech_bubble.get_child(1).get_child(1).modulate = temp_coin.get_child(1).modulate
+	
