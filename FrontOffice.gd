@@ -12,6 +12,8 @@ export (PackedScene) var SpeechRequest
 var exchange_coins = [] #a list of coins traded at the bank
 var exchange_rates = [] #a list of exchange rates. ex. 5:6:7
 var map_coins = [] #list of coins that appear on map (with hit boxes)
+var tip_coins = [] #list of coins that appear under the "TIP" SIGN
+var tip_amounts = [] #list of tips that have been accumilated (labels)
 
 var main_player #the main player instance
 var speech_bubble
@@ -93,6 +95,22 @@ func _ready():
 			colon_label.text = ":"
 			add_child(colon_label)
 		
+		#Also create a spot under the "TIP" sign
+		var tip_coin = Coin.instance()
+		tip_coin.position = $FloorMapPrim.map_to_world( Vector2(3,10+i) )
+		add_child(tip_coin)
+		tip_coin.get_child(0).modulate = coin.get_child(0).modulate 
+		tip_coin.get_child(1).modulate = coin.get_child(1).modulate 
+		tip_coins.append(tip_coin)
+		
+		#Create labels for the amounts too
+		var amount_label = Label.new()
+		amount_label.margin_left = tip_coin.position.x + 2*$FloorMapPrim.cell_size.x
+		amount_label.margin_top = tip_coin.position.y
+		amount_label.text = "0"
+		add_child(amount_label)
+		tip_amounts.append(amount_label)
+		
 		#Finally, create a copy and hit box in the bank
 		#The coin...
 		var map_coin = Coin.instance()
@@ -102,6 +120,19 @@ func _ready():
 		map_coin.get_child(1).modulate = coin.get_child(1).modulate 
 		map_coins.append(map_coin)
 		#(NOT USING HITBOXES)
+	
+	#Create signs for the various exchange rates and crap
+	var temp_label = Label.new()
+	temp_label.margin_left = 3*($FloorMapPrim.cell_size.x)
+	temp_label.margin_top = 9*($FloorMapPrim.cell_size.y)
+	temp_label.text = " TIPS"
+	add_child(temp_label)
+	
+	var exchange_label = Label.new()
+	exchange_label.margin_left = 3*($FloorMapPrim.cell_size.x)
+	exchange_label.margin_top = 3*($FloorMapPrim.cell_size.y)
+	exchange_label.text = "EXCHANGE"
+	add_child(exchange_label)
 	
 	#Create rope line
 	$WallMapPrim.set_cell(18,16,8)
@@ -203,7 +234,7 @@ func _process(delta):
 				#Should be a new function
 				grabCoin(map_coin)
 		#Check if main_player is at customer
-		var counter_position = $FloorMapPrim.get_child(1).position+Vector2(0,-3*$FloorMapPrim.cell_size.y)
+		var counter_position = $FloorMapPrim.get_child(1).position+Vector2(0,-2*$FloorMapPrim.cell_size.y)
 		if main_player.position == counter_position:
 			#DIDNT ACTUALLY NEED TIMER< BUT KEEP IT HERE FOR FUTURE REF
 #			var t = Timer.new()
@@ -215,14 +246,13 @@ func _process(delta):
 #			t.queue_free()
 #			print("dont time")
 			#end timer
-			print("rech")
 			payCustomer()
 			moveLineUp()
 
 		#Determine if it should go back to window or get more coin
 		if hasCashExchange() == true:
 			#Walk back to customer
-			counter_position = $FloorMapPrim.get_child(1).position+Vector2(0,-3*$FloorMapPrim.cell_size.y)
+			counter_position = $FloorMapPrim.get_child(1).position+Vector2(0,-2*$FloorMapPrim.cell_size.y)
 			main_player.path = $FloorMapPrim.find_path(main_player.position, counter_position)
 		else:
 			#Get path to the coin the customer REQUESTS
@@ -337,12 +367,21 @@ func whichExchangeIndex(in_coin):
 #Clears all labels and deuques first customer
 func payCustomer():
 	
+	#Check if zodiac signs compatible (for tip)
+	if Story.zodiac_compatibility[main_player.zodiac_sign][$FloorMapPrim.get_child(1).zodiac_sign] == 0:
+		#Customer tips the banker
+		#Get index of the requested coin (the kind that the customer has just recieved)
+		var tip_index = whichExchangeIndex(speech_bubble.get_child(1))
+		tip_amounts[tip_index].text = str(int(tip_amounts[tip_index].text)+1) #Increment the tip amount
+	
 	#$FloorMapPrim.get_child(1).queue_free()
 	$FloorMapPrim.remove_child($FloorMapPrim.get_child(1)) #remove from scene
 	main_player.coin_label.text = "0"
 	main_player.coin_label.visible = false
 	main_player.get_child(2).visible = false #the coin_background
 	main_player.coin.visible = false
+	
+
 
 			
 #TODO: MAKE A function for moving up creatures in line
